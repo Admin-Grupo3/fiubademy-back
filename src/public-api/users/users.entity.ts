@@ -7,12 +7,8 @@ import {
 } from 'typeorm';
 
 export const ROLES = {
-  SHOPPER: 'shopper',
-  INFLUENCER: 'influencer',
-  MARKETPLACE_ADMIN: 'marketplace_admin',
-  STORE_ADMIN: 'store_admin',
-  SELLER_PERSON: 'seller_person',
-  SUPER_ADMIN: 'super_admin',
+  STANDARD_USER: 'standard-user',
+  ADMIN: 'admin',
 };
 @Entity('users')
 export class Users extends BaseEntity {
@@ -25,7 +21,7 @@ export class Users extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   password: unknown;
 
-  @Column({ type: 'simple-array', default: ROLES.SHOPPER })
+  @Column({ type: 'simple-array', default: ROLES.STANDARD_USER })
   roles: keyof (typeof ROLES)[];
 
   @CreateDateColumn()
