@@ -11,7 +11,7 @@ import {
 import { UserSignInRequest } from './dtos/UserSignInRequest.dto';
 import { UserSignUpRequest } from './dtos/UserSignUpRequest.dto';
 import { Response } from 'express';
-import { UsersService } from 'src/public-api/users.service';
+import { UsersManagerService } from 'src/public-api/usersManager.service';
 import { LocalAuthGuard } from 'src/public-api/authentication/local.auth.guard';
 
 interface SignIn {
@@ -24,9 +24,7 @@ interface SignIn {
 export class UsersController {
   private logger = new Logger(this.constructor.name);
 
-  constructor(
-    private usersService: UsersService,
-  ) {}
+  constructor(private usersManagerService: UsersManagerService) {}
 
   @Post('users/signin')
   async signIn(@Body() request: UserSignInRequest, @Res() response: Response) {
@@ -50,7 +48,7 @@ export class UsersController {
 
     const body = { ...userData };
 
-    return this.usersService.returnTokenAsCookie(
+    return this.usersManagerService.returnTokenAsCookie(
       response,
       signInRes.token,
       parseInt(signInRes.tokenMaxAge),
@@ -80,7 +78,7 @@ export class UsersController {
 
     const body = { ...userData };
 
-    return this.usersService.returnTokenAsCookie(
+    return this.usersManagerService.returnTokenAsCookie(
       response,
       signInRes.token,
       parseInt(signInRes.tokenMaxAge),
@@ -91,6 +89,6 @@ export class UsersController {
   @UseGuards(LocalAuthGuard)
   @Post('users/logout')
   async logOut(@Res() response: Response) {
-    return this.usersService.removeTokenCookie(response);
+    return this.usersManagerService.removeTokenCookie(response);
   }
 }

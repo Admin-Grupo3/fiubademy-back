@@ -7,12 +7,29 @@ services:
     environment:
       - NO_COLOR=true
       - PORT=80
+      - TYPEORM_HOST=fiubademy-back-db-1
+      - TYPEORM_USERNAME=postgres
+      - TYPEORM_PASSWORD=mysecretpassword
+      - TYPEORM_PORT=5432
+      - TYPEORM_DBNAME=fiubademy
     ports:
-      - '3200:80'
+      - '3300:80'
     command: npm run start:dev
     volumes:
       - '.:/app'
       - fiubademy-public-api-node-modules:/app/node_modules
+    networks:
+      - fiubademy
+  db:
+    image: postgres:13-alpine
+    platform: linux/arm64/v8
+    restart: always
+    ports:
+      - '5560:5432'
+    env_file:
+      - .db.env
+    volumes:
+      - fiubademy-db-data:/var/lib/postgresql/data
     networks:
       - fiubademy
 
@@ -22,3 +39,4 @@ networks:
 
 volumes:
   fiubademy-public-api-node-modules:
+  fiubademy-db-data:

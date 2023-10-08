@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PublicApiModule } from './public-api/public-api.module';
+import { dsOptions } from './database/ormconfig';
+import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
+    TypeOrmModule.forRoot(dsOptions),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

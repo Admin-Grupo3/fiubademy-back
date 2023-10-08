@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Response } from 'express';
 
 @Injectable()
-export class UsersService {
+export class UsersManagerService {
   private logger = new Logger(this.constructor.name);
 
   returnTokenAsCookie(
