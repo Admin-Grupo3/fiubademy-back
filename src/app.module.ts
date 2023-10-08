@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PublicApiModule } from './public-api/public-api.module';
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    PublicApiModule,
+  ],
+  controllers: [],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  static port: string;
+  constructor(private configService: ConfigService) {
+    AppModule.port = this.configService.get<string>('PORT');
+  }
+}
