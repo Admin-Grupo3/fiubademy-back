@@ -31,7 +31,7 @@ export class UsersController {
     const { email, password } = request;
     let signInRes: SignIn;
     try {
-      // TODO SIGN IN USER WITH EMAIL AND PASSWORD
+      signInRes = await this.usersManagerService.signInUser(email, password);
     } catch (error) {
       this.logger.error(error);
       // check connection error
@@ -59,9 +59,9 @@ export class UsersController {
   @Post('users/signup')
   async signUp(@Body() request: UserSignUpRequest, @Res() response: Response) {
     const { email, password } = request;
-    let signInRes: SignIn;
+    let signUpRes: SignIn;
     try {
-      // TODO SIGN UP USER WITH EMAIL AND PASSWORD
+      signUpRes = await this.usersManagerService.signUpUser(email, password);
     } catch (error) {
       this.logger.error(error);
       // check connection error
@@ -74,14 +74,14 @@ export class UsersController {
       throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
     }
 
-    const userData = JSON.parse(signInRes.userData);
+    const userData = JSON.parse(signUpRes.userData);
 
     const body = { ...userData };
 
     return this.usersManagerService.returnTokenAsCookie(
       response,
-      signInRes.token,
-      parseInt(signInRes.tokenMaxAge),
+      signUpRes.token,
+      parseInt(signUpRes.tokenMaxAge),
       body,
     );
   }
