@@ -1,15 +1,17 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthenticationService {
-  constructor() {}
+  constructor(private readonly jwtService: JwtService) {}
   async validate(token: string): Promise<any> {
     let res;
     try {
-      // TODO: VALIDATE JWT TOKEN
+      // validate jwt
+      res = await this.jwtService.verifyAsync(token);
     } catch (error) {
       throw new NotAcceptableException('Wrong Credentials');
     }
-    return res;
+    return { valid: true, decoded: res.decoded };
   }
 }

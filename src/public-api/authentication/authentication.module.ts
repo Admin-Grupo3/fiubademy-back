@@ -3,9 +3,7 @@ import { AuthenticationService } from './authentication.service';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [
-    PassportModule,
-  ],
+  imports: [PassportModule],
   providers: [AuthenticationService],
   exports: [AuthenticationService],
 })

@@ -20,6 +20,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
     const { valid, decoded } = await this.authenticationService.validate(
       jwtToken,
     );
+    console.log('decoded', decoded);
 
     request.tokenData = decoded;
 

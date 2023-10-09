@@ -86,6 +86,10 @@ export class UsersManagerService {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
 
+    // hash password before saving
+    const salt = await bcrypt.genSalt(process.env.SALT_HASH || 10);
+    password = await bcrypt.hash(password, salt);
+
     user = await this.usersService.create({
       email,
       password,
