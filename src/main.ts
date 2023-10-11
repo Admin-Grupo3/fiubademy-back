@@ -10,7 +10,12 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  app.enableCors();
+  const corsOptions = {
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  };
+  app.enableCors(corsOptions);
 
   await app.listen(AppModule.port, () => {
     logger.log('App is listening...');
