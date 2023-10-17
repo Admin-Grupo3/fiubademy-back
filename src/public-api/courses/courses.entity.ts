@@ -2,7 +2,6 @@ import {
   BaseEntity,
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   JoinTable,
@@ -12,21 +11,7 @@ import {
 
 import { Categories } from '../categories/categories.entity';
 import { Users } from '../users/users.entity';
-
-@Entity('languages')
-export class Languages extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ type: 'varchar', length: 255, unique: true })
-  name: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-}
+import { Languages } from '../languages/languages.entity';
 
 @Entity('courses')
 export class Courses extends BaseEntity {

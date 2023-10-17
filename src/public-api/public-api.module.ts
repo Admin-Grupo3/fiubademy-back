@@ -11,9 +11,10 @@ import { CoursesService } from './courses/courses.service';
 import { LanguagesService } from './languages/languages.service';
 import { UsersService } from './users/users.service';
 import { Categories } from './categories/categories.entity';
-import { Courses, Languages } from './courses/courses.entity';
+import { Courses } from './courses/courses.entity';
 import { Users } from './users/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Languages } from './languages/languages.entity';
 
 @Module({
   imports: [
