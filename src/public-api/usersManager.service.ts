@@ -9,7 +9,7 @@ import { Response } from 'express';
 import { UsersService } from './users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { ROLES } from './users/users.entity';
-import * as bcrypt from 'bcrypt';
+import { sha256 } from 'js-sha256';
 
 export class AuthPayloadDto {
   sub: string;
@@ -53,7 +53,8 @@ export class UsersManagerService {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const isMatch = await bcrypt.compare(password, user.password);
+    const salt = process.env.SALT_HASH;
+    const isMatch = (await sha256(password + salt)) === user.password;
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -87,8 +88,8 @@ export class UsersManagerService {
     }
 
     // hash password before saving
-    const salt = await bcrypt.genSalt(process.env.SALT_HASH || 10);
-    password = await bcrypt.hash(password, salt);
+    const salt = process.env.SALT_HASH;
+    password = await sha256(password + salt);
 
     user = await this.usersService.create({
       email,
