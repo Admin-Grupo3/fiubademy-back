@@ -63,7 +63,7 @@ export class UsersController {
     try {
       signUpRes = await this.usersManagerService.signUpUser(email, password);
     } catch (error) {
-      this.logger.error(error);
+      Logger.warn(error);
       // check connection error
       if (error.code === 14) {
         throw new HttpException(
