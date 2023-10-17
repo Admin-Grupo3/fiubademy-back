@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -15,6 +16,7 @@ interface InterceptedRequest extends Request {
 
 @Injectable()
 export class RolesGuard implements CanActivate {
+  private logger = new Logger(this.constructor.name);
   constructor(private reflector: Reflector) {}
   canActivate(
     context: ExecutionContext,
@@ -30,24 +32,18 @@ export class RolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<InterceptedRequest>();
 
-    const { tokenData: tokenData_ } = request;
-    console.log('tokenData_', tokenData_);
-
-    // parse tokenData from request in try ctach block
-    let tokenData: any;
-    try {
-      tokenData = JSON.parse(tokenData_);
-    } catch (error) {
-      throw new UnauthorizedException('Unauthorized access');
-    }
+    const { tokenData: tokenData } = request;
+    console.log('tokenData', tokenData);
 
     if (!tokenData) {
+      this.logger.error(`Error tokenData is empty`);
       throw new UnauthorizedException('Unauthorized access');
     }
 
     const tokenRoles: string[] = tokenData.roles;
 
     if (!tokenRoles) {
+      this.logger.error(`Error tokenRoles is empty`);
       throw new UnauthorizedException('Unauthorized access');
     }
 
