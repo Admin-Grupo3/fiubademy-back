@@ -14,7 +14,12 @@ export class CoursesManagerService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
-  async createCourse(title: string, languageId: number, categoryIds) {
+  async createCourse(
+    title: string,
+    language: string,
+    categoryIds: number[],
+    email: string,
+  ) {
     this.logger.log(`createCourse: ${title}`);
 
     let course = await this.coursesService.findByTitle(title);
@@ -22,29 +27,30 @@ export class CoursesManagerService {
       throw new HttpException('Course already exists', HttpStatus.BAD_REQUEST);
     }
 
-    const user = await this.usersService.findById(
-      '9d5d90e8-979e-4dff-8d8d-17f79408f08c',
-    ); // TODO: obtener a partir de JWT
+    const user = await this.usersService.findByEmail(email);
 
-    const language = await this.languagesService.findById(languageId);
-    if (!language) {
+    const lang = await this.languagesService.findByName(language);
+    if (!lang) {
       throw new HttpException('Language doesnt exists', HttpStatus.BAD_REQUEST);
     }
 
-    const categories = categoryIds.map(async (categoryId) => {
-      await this.categoriesService.findById(categoryId);
+    // find categories from the array of ids
+    const categories = [];
+    categoryIds.forEach(async (categoryId) => {
+      const category = await this.categoriesService.findById(categoryId);
+      if (!category) {
+        throw new HttpException(
+          'One of the categories doesnt exist',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      categories.push(category);
     });
-    if (categories.contains(null)) {
-      throw new HttpException(
-        'One of the categories doesnt exist',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     course = await this.coursesService.create({
       title,
       user,
-      language,
+      language: lang,
       categories,
     });
 

@@ -5,7 +5,7 @@ export class CourseCreateRequest {
   title: string;
 
   // @ApiProperty()
-  languageId: number;
+  language: string;
 
   // @ApiProperty()
   categoryIds: number[];

@@ -12,6 +12,6 @@ export class AuthenticationService {
     } catch (error) {
       throw new NotAcceptableException('Wrong Credentials');
     }
-    return { valid: true, decoded: res.decoded };
+    return { valid: true, decoded: res };
   }
 }
