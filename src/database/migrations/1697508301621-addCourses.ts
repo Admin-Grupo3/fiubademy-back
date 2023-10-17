@@ -65,6 +65,18 @@ export class AddCourses1697508301621 implements MigrationInterface {
             ALTER TABLE "courses_categories_categories"
             ADD CONSTRAINT "FK_ed44e2633571a03c8298754e089" FOREIGN KEY ("categories_id") REFERENCES "categories"("id") ON DELETE CASCADE ON UPDATE CASCADE
         `);
+    await queryRunner.query(`INSERT INTO public.categories VALUES
+        (1, 'programacion'),
+        (2, 'ciencia');
+        `);
+    await queryRunner.query(`INSERT INTO public.languages VALUES
+        (1, 'spanish'),
+        (2, 'english');
+        `);
+
+    await queryRunner.query(`INSERT INTO public.users 
+        VALUES ('9d5d90e8-979e-4dff-8d8d-17f79408f08c', 'test', 'test', 'test');
+        `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
