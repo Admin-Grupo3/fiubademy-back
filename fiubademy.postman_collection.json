@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "90b7678d-c0ff-4f2d-8c6b-16e93ec101f8",
+		"name": "Admin1 - FIUBADEMY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17814833"
+	},
+	"item": [
+		{
+			"name": "Create Course",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"test title\",\r\n    \"languageId\": 1,\r\n    \"categoryIds\": [\r\n        1, 2\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3300/courses",
+					"host": [
+						"localhost"
+					],
+					"port": "3300",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
