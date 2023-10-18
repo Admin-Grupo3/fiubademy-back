@@ -15,6 +15,8 @@ import { Courses } from './courses/courses.entity';
 import { Users } from './users/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Languages } from './languages/languages.entity';
+import { CategoriesController } from './controllers/categories/categories.controller';
+import { CategoriesManagerService } from './categoriesManager.service';
 
 @Module({
   imports: [
@@ -26,13 +28,14 @@ import { Languages } from './languages/languages.entity';
       signOptions: { expiresIn: `${process.env.JWT_EXPIRES_IN}s` },
     }),
   ],
-  controllers: [CoursesController, UsersController, TestsController],
+  controllers: [CoursesController, UsersController, TestsController, CategoriesController],
   providers: [
     CategoriesService,
     CoursesManagerService,
     CoursesService,
     LanguagesService,
     UsersManagerService,
+    CategoriesManagerService,
     UsersService,
   ],
   exports: [],

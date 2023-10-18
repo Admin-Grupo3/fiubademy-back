@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PublicApiModule } from './public-api/public-api.module';
 import { dsOptions } from './database/ormconfig';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesController } from './public-api/controllers/categories/categories.controller';
 @Module({
   imports: [
     TypeOrmModule.forRoot(dsOptions),

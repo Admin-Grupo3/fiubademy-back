@@ -13,4 +13,8 @@ export class CategoriesService {
   findById(id: number): Promise<Categories> {
     return this.categoriesRepository.findOneBy({ id });
   }
+
+  getAll(): Promise<Categories[]>{
+    return this.categoriesRepository.find();
+  }
 }
