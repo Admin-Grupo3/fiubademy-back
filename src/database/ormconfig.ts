@@ -15,6 +15,29 @@ export const dsOptions: PostgresConnectionOptions = {
   entities: ['dist/**/**/*.entity{.ts,.js}'],
   migrations: ['dist/database/migrations/*{.ts,.js}'],
 };
-const datasource = new DataSource(dsOptions);
+
+export const dsOptionsProd: PostgresConnectionOptions = {
+  type: 'postgres',
+  url: process.env.DB_URL,
+  database: process.env.TYPEORM_DBNAME || 'fiubademy',
+  username: process.env.TYPEORM_USERNAME || 'postgres',
+  password: process.env.TYPEORM_PASSWORD || 'mysecretpassword',
+  synchronize: false,
+  logging: false,
+  migrationsRun: true,
+  namingStrategy: new SnakeNamingStrategy(),
+  entities: ['dist/**/**/*.entity{.ts,.js}'],
+  migrations: ['dist/database/migrations/*{.ts,.js}'],
+};
+
+let datasource: DataSource;
+
+if (process.env.NODE_ENV === 'production') {
+  datasource = new DataSource(dsOptionsProd);
+}
+else {
+  datasource = new DataSource(dsOptions);
+}
+
 void datasource.initialize();
 export default datasource;
