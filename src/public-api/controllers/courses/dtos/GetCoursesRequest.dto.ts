@@ -1,9 +1,9 @@
 // import { ApiProperty } from '@nestjs/swagger';
 
-export class UserSignUpRequest {
+export class GetCoursesRequest {
   // @ApiProperty()
-  email: string;
+  title: string;
 
   // @ApiProperty()
-  password: string;
+  category: number;
 }

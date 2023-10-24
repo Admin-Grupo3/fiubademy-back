@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Courses } from '../courses/courses.entity';
 
 export const ROLES = {
   STANDARD_USER: 'standard-user',
@@ -23,6 +25,9 @@ export class Users extends BaseEntity {
 
   @Column({ type: 'simple-array', default: ROLES.STANDARD_USER })
   roles: keyof (typeof ROLES)[];
+
+  @OneToMany(() => Courses, (course) => course.id)
+  myCourses: Courses[];
 
   @CreateDateColumn()
   createdAt: Date;

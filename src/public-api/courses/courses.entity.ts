@@ -21,8 +21,23 @@ export class Courses extends BaseEntity {
   @Column({ type: 'varchar', length: 255, unique: true })
   title: string;
 
-  @ManyToOne(() => Users, (user) => user.id)
-  user: Users;
+  @Column({ type: 'varchar', length: 255, nullable: true, default: '' })
+  description: string;
+
+  @Column('int', { default: 0 })
+  rating_count: number;
+
+  @Column('int', { default: 0 })
+  rating_star: number;
+
+  @Column('float', { default: 0 })
+  price: number;
+
+  @Column('float', { default: 0 })
+  discount: number;
+
+  @ManyToOne(() => Users, (creator) => creator.id)
+  creator: Users;
 
   @ManyToOne(() => Languages, (language) => language.id)
   language: Languages;
@@ -30,6 +45,15 @@ export class Courses extends BaseEntity {
   @ManyToMany(() => Categories, (category) => category.id)
   @JoinTable()
   categories: Categories[];
+
+  @Column({ type: 'varchar', length: 255, nullable: true, default: '' })
+  image: string;
+
+  @Column('varchar', { array: true, default: '{}' })
+  what_will_you_learn: string[];
+
+  @Column('varchar', { array: true, default: '{}' })
+  content: string[];
 
   @CreateDateColumn()
   createdAt: Date;

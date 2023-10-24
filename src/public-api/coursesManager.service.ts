@@ -14,6 +14,49 @@ export class CoursesManagerService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
+  async getCourses(title?: string, category?: number) {
+    if (!title && !category) {
+      throw new HttpException(
+        'You must provide at least one parameter to get courses',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    let courses = [];
+    if (category) {
+      courses = await this.coursesService.findCourseByCategory(category);
+      // filter courses by title
+      if (title) {
+        return courses.filter((course) => course.title.includes(title));
+      }
+    } else {
+      courses = [await this.coursesService.findByTitle(title)];
+    }
+
+    // filter null values
+    courses = courses.filter((course) => course !== null);
+
+    return {
+      courses,
+    };
+  }
+
+  async modifyCourse(userId: string, courseId: string, data: any) {
+    const course = await this.coursesService.findById(courseId);
+    if (!course) {
+      throw new HttpException('Course doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+    // check that the userId is the same as the creator
+    if (course.creator.id !== userId) {
+      throw new HttpException(
+        'You are not the creator of this course',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return await this.coursesService.update(courseId, data);
+  }
+
   async createCourse(
     title: string,
     language: string,
@@ -49,7 +92,7 @@ export class CoursesManagerService {
 
     course = await this.coursesService.create({
       title,
-      user,
+      creator: user,
       language: lang,
       categories,
     });

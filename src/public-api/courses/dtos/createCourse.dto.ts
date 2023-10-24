@@ -5,7 +5,7 @@ import { Users } from 'src/public-api/users/users.entity';
 export class CreateCourseDto {
   title: string;
 
-  user: Users;
+  creator: Users;
 
   categories: Categories[];
 

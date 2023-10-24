@@ -16,7 +16,42 @@ export class CoursesService {
     return await this.coursesRepository.save(newTask);
   }
 
+  async findById(id: string): Promise<Courses> {
+    console.log(
+      await this.coursesRepository.findOne({
+        where: { id },
+        relations: ['categories', 'creator'],
+      }),
+    );
+    return this.coursesRepository.findOne({
+      where: { id },
+      relations: ['categories', 'creator'],
+    });
+  }
+
   findByTitle(title: string): Promise<Courses> {
-    return this.coursesRepository.findOneBy({ title });
+    return this.coursesRepository.findOne({
+      where: { title },
+      relations: ['categories'],
+    });
+  }
+
+  findCourseByCategory(categoryId: number): Promise<Courses[]> {
+    // find course by category relation
+    return this.coursesRepository.find({
+      where: { categories: { id: categoryId } },
+      relations: ['categories'],
+    });
+  }
+
+  async update(courseId: string, data: any) {
+    const course = await this.findById(courseId);
+    // for each property of data check if it exists and update it
+    Object.keys(data).forEach((key) => {
+      if (course[key]) {
+        course[key] = data[key];
+      }
+    });
+    return await this.coursesRepository.save(course);
   }
 }
