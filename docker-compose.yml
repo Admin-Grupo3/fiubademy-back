@@ -15,6 +15,7 @@ services:
       - JWT_SECRET=SOMESECRET
       - JWT_EXPIRES_IN=86400
       - SALT_HASH=1000
+      - TYPEORM_SSL=false
     ports:
       - '3300:80'
     command: npm run start:dev
