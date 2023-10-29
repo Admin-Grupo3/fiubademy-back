@@ -5,7 +5,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Courses } from '../courses/courses.entity';
 
 @Entity('languages')
 export class Languages extends BaseEntity {
@@ -14,6 +16,9 @@ export class Languages extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255, unique: true })
   name: string;
+
+  @OneToMany(() => Courses, (course) => course.id)
+  courses: Courses[];
 
   @CreateDateColumn()
   createdAt: Date;
