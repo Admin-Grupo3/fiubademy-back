@@ -14,6 +14,15 @@ export const dsOptions: PostgresConnectionOptions = {
   namingStrategy: new SnakeNamingStrategy(),
   entities: ['dist/**/**/*.entity{.ts,.js}'],
   migrations: ['dist/database/migrations/*{.ts,.js}'],
+  ssl: process.env.TYPEORM_SSL === 'true',
+  extra: {
+    ssl:
+      process.env.TYPEORM_SSL === 'true'
+        ? {
+            rejectUnauthorized: false,
+          }
+        : null,
+  },
 };
 const datasource = new DataSource(dsOptions);
 void datasource.initialize();
