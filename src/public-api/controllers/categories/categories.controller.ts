@@ -25,8 +25,6 @@ export class CategoriesController {
 
   constructor(private categoriesManagerService: CategoriesManagerService) {}
 
-  @UseGuards(LocalAuthGuard, RolesGuard)
-  @RolesAccess(ROLES.STANDARD_USER)
   @Get('categories')
   async getAllCategories(@Res() response: Response) {
     let result: GetCategoriesResult;
