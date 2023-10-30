@@ -7,11 +7,13 @@ import {
   JoinTable,
   ManyToOne,
   ManyToMany,
+  OneToMany,
 } from 'typeorm';
 
 import { Categories } from '../categories/categories.entity';
 import { Users } from '../users/users.entity';
 import { Languages } from '../languages/languages.entity';
+import { CoursesExams } from '../courses-exams/courses-exams.entity';
 
 @Entity('courses')
 export class Courses extends BaseEntity {
@@ -54,6 +56,10 @@ export class Courses extends BaseEntity {
 
   @Column('varchar', { array: true, default: '{}' })
   content: string[];
+
+  @OneToMany(() => CoursesExams, (exam) => exam.course)
+  @JoinTable()
+  exams: CoursesExams[];
 
   @CreateDateColumn()
   createdAt: Date;
