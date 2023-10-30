@@ -15,13 +15,6 @@ export class CoursesManagerService {
   ) {}
 
   async getCourses(title?: string, category?: number) {
-    if (!title && !category) {
-      throw new HttpException(
-        'You must provide at least one parameter to get courses',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     let courses = [];
     if (category) {
       courses = await this.coursesService.findCourseByCategory(category);
@@ -29,8 +22,10 @@ export class CoursesManagerService {
       if (title) {
         return courses.filter((course) => course.title.includes(title));
       }
-    } else {
+    } else if (title) {
       courses = [await this.coursesService.findByTitle(title)];
+    } else {
+      courses = (await this.coursesService.findAll()) || [];
     }
 
     // filter null values
