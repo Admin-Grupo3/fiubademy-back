@@ -39,12 +39,6 @@ export class CoursesService {
     });
   }
 
-  findAll(): Promise<Courses[]> {
-    return this.coursesRepository.find({
-      relations: ['categories', 'creator'],
-    });
-  }
-
   findCourseByCategory(categoryId: number): Promise<Courses[]> {
     // find course by category relation
     return this.coursesRepository.find({
