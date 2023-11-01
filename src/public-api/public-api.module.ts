@@ -29,6 +29,13 @@ import { LearningPathManagerService } from './learningPathManager.service';
 import { LearningPathPurchasesService } from './learning-paths-purchases/learningPathPurchases.service';
 import { LearningPathPurchases } from './learning-paths-purchases/learningPathPurchases.entity';
 import { Company } from './company/company.entity';
+import { CoursesRatingController } from './controllers/coursesRatings/coursesRatings.controller';
+import { CoursesRatingManagerService } from './coursesRatingManager.service';
+import { CoursesOpinionManagerService } from './coursesOpinionManager.service';
+import { CoursesRating } from './coursesRatings/coursesRating.entity';
+import { CoursesOpinions } from './courseOpinions/courseOpinions.entity';
+import { CoursesRatingService } from './coursesRatings/coursesRating.service';
+import { CoursesOpinionsService } from './courseOpinions/courseOpinions.service';
 
 @Module({
   imports: [
@@ -44,6 +51,8 @@ import { Company } from './company/company.entity';
       LearningPaths,
       LearningPathPurchases,
       Company,
+      CoursesRating,
+      CoursesOpinions,
     ]),
     JwtModule.register({
       global: true,
@@ -57,6 +66,7 @@ import { Company } from './company/company.entity';
     TestsController,
     CategoriesController,
     LearningPathsController,
+    CoursesRatingController,
   ],
   providers: [
     CategoriesService,
@@ -72,6 +82,10 @@ import { Company } from './company/company.entity';
     LearningPathManagerService,
     LearningPathPurchasesService,
     LearningPathManagerService,
+    CoursesRatingManagerService,
+    CoursesOpinionManagerService,
+    CoursesRatingService,
+    CoursesOpinionsService,
   ],
   exports: [],
 })
