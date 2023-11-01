@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -22,6 +23,7 @@ import { ROLES } from 'src/public-api/users/users.entity';
 import ISO6391 from 'iso-639-1';
 import { GetCoursesRequest } from './dtos/GetCoursesRequest.dto';
 import { ModifyCoursesRequest } from './dtos/ModifyCoursesRequest.dto';
+import { CreateCourseExamDto } from 'src/public-api/courses-exams/dtos/CreateCourseExam';
 
 interface CreateCourseResult {
   courseData: string;
@@ -96,6 +98,32 @@ export class CoursesController {
   }
 
   @UseGuards(LocalAuthGuard)
+  @Delete('courses/:id')
+  async deleteCourse(
+    @TokenData() tokenData: AuthTokenData,
+    @Param('id') courseId: string,
+  ) {
+    const userId = tokenData.sub;
+    let result;
+    try {
+      result = await this.coursesManagerService.deleteCourse(userId, courseId);
+    } catch (error) {
+      this.logger.error(error);
+      // check connection error
+      if (error.code === 14) {
+        throw new HttpException(
+          'Service Unavailable',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
+      }
+      this.logger.warn(error);
+      throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
+  }
+
+  @UseGuards(LocalAuthGuard)
   @Post('courses/:id')
   async updateCourses(
     @TokenData() tokenData: AuthTokenData,
@@ -116,6 +144,112 @@ export class CoursesController {
         userId,
         courseId,
         request,
+      );
+    } catch (error) {
+      this.logger.error(error);
+      // check connection error
+      if (error.code === 14) {
+        throw new HttpException(
+          'Service Unavailable',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
+      }
+      this.logger.warn(error);
+      throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
+    }
+    return result;
+  }
+
+  @Get('courses/:id/exams')
+  async getCourseExams(@Param('id') courseId: string) {
+    let result;
+    try {
+      result = await this.coursesManagerService.getExamsFromCourse(courseId);
+    } catch (error) {
+      this.logger.error(error);
+      // check connection error
+      if (error.code === 14) {
+        throw new HttpException(
+          'Service Unavailable',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
+      }
+      this.logger.warn(error);
+      throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
+    }
+    return result;
+  }
+
+  @Get('courses/:id/exams/:examId')
+  async getCourseExam(
+    @Param('id') courseId: string,
+    @Param('examId') examId: string,
+  ) {
+    let result;
+    try {
+      result = await this.coursesManagerService.getExamFromCourse(
+        courseId,
+        examId,
+      );
+    } catch (error) {
+      this.logger.error(error);
+      // check connection error
+      if (error.code === 14) {
+        throw new HttpException(
+          'Service Unavailable',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
+      }
+      this.logger.warn(error);
+      throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
+    }
+    return result;
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('courses/:id/exams')
+  async createCourseExam(
+    @TokenData() tokenData: AuthTokenData,
+    @Param('id') courseId: string,
+    @Body() request: CreateCourseExamDto,
+  ) {
+    const userId = tokenData.sub;
+    let result;
+    try {
+      result = await this.coursesManagerService.addExamToCourse(
+        userId,
+        courseId,
+        request,
+      );
+    } catch (error) {
+      this.logger.error(error);
+      // check connection error
+      if (error.code === 14) {
+        throw new HttpException(
+          'Service Unavailable',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
+      }
+      this.logger.warn(error);
+      throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
+    }
+    return result;
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Delete('courses/:id/exams/:examId')
+  async deleteCourseExam(
+    @TokenData() tokenData: AuthTokenData,
+    @Param('id') courseId: string,
+    @Param('examId') examId: string,
+  ) {
+    const userId = tokenData.sub;
+    let result;
+    try {
+      result = await this.coursesManagerService.deleteExamFromCourse(
+        userId,
+        courseId,
+        examId,
       );
     } catch (error) {
       this.logger.error(error);

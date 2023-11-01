@@ -17,18 +17,33 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Languages } from './languages/languages.entity';
 import { CategoriesController } from './controllers/categories/categories.controller';
 import { CategoriesManagerService } from './categoriesManager.service';
+import { CoursesExamService } from './courses-exams/courses-exams.service';
+import { CoursesExams } from './courses-exams/courses-exams.entity';
+import { CoursesQuestions } from './courses-exams/courses-questions/courses-questions.entity';
 
 @Module({
   imports: [
     AuthenticationModule,
-    TypeOrmModule.forFeature([Categories, Courses, Languages, Users]),
+    TypeOrmModule.forFeature([
+      Categories,
+      Courses,
+      Languages,
+      Users,
+      CoursesExams,
+      CoursesQuestions,
+    ]),
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: `${process.env.JWT_EXPIRES_IN}s` },
     }),
   ],
-  controllers: [CoursesController, UsersController, TestsController, CategoriesController],
+  controllers: [
+    CoursesController,
+    UsersController,
+    TestsController,
+    CategoriesController,
+  ],
   providers: [
     CategoriesService,
     CoursesManagerService,
@@ -37,6 +52,7 @@ import { CategoriesManagerService } from './categoriesManager.service';
     UsersManagerService,
     CategoriesManagerService,
     UsersService,
+    CoursesExamService,
   ],
   exports: [],
 })

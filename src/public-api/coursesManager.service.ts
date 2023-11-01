@@ -3,6 +3,7 @@ import { CoursesService } from './courses/courses.service';
 import { UsersService } from './users/users.service';
 import { LanguagesService } from './languages/languages.service';
 import { CategoriesService } from './categories/categories.service';
+import { CreateCourseExamDto } from './courses-exams/dtos/CreateCourseExam';
 
 @Injectable()
 export class CoursesManagerService {
@@ -99,5 +100,81 @@ export class CoursesManagerService {
     return {
       courseData: JSON.stringify(courseData),
     };
+  }
+
+  async deleteCourse(userId: string, courseId: string) {
+    this.logger.log(`deleteCourse: ${courseId}`);
+    // check that the userId is the same as the creator
+    await this.checkUserIsCreatorOfCourse(userId, courseId);
+    return this.coursesService.delete(courseId);
+  }
+
+  async checkUserIsCreatorOfCourse(userId: string, courseId: string) {
+    const course = await this.coursesService.findById(courseId);
+    if (!course) {
+      throw new HttpException('Course doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+    if (course.creator.id !== userId) {
+      throw new HttpException(
+        'You are not the creator of this course',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async addExamToCourse(
+    userId: string,
+    courseId: string,
+    examData: CreateCourseExamDto,
+  ) {
+    this.logger.log(`addExamToCourse: ${courseId} for user id:  ${userId}`);
+    // check  that the user is the creator of this course
+    await this.checkUserIsCreatorOfCourse(userId, courseId);
+    const course = await this.coursesService.addExam(courseId, examData);
+
+    // filter from questions the correct answer
+    course.exams = course.exams.map((exam) =>
+      this.proxyFilterCorrectAnswerFromExam(exam),
+    );
+
+    return course;
+  }
+
+  proxyFilterCorrectAnswerFromExam(exam: any) {
+    console.log(exam);
+    exam.questions.forEach((question) => {
+      delete question.correctAnswerId;
+    });
+    return exam;
+  }
+
+  async getExamsFromCourse(courseId: string) {
+    this.logger.log(`getExams: ${courseId}`);
+    const exams_ = await this.coursesService.getExams(courseId);
+
+    const exams = exams_.map((exam) =>
+      this.proxyFilterCorrectAnswerFromExam(exam),
+    );
+    return {
+      exams,
+    };
+  }
+
+  async getExamFromCourse(courseId: string, examId: string) {
+    this.logger.log(`getExam: ${courseId}`);
+    const exam = await this.coursesService.getExam(courseId, examId);
+    // filter from questions the correct answer
+    exam?.questions.forEach((question) => {
+      delete question.correctAnswerId;
+    });
+    return {
+      exam,
+    };
+  }
+
+  async deleteExamFromCourse(userId: string, courseId: string, examId: string) {
+    this.logger.log(`deleteExam: ${courseId}`);
+    await this.checkUserIsCreatorOfCourse(userId, courseId);
+    return await this.coursesService.deleteExam(courseId, examId);
   }
 }

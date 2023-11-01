@@ -33,7 +33,6 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<InterceptedRequest>();
 
     const { tokenData: tokenData } = request;
-    console.log('tokenData', tokenData);
 
     if (!tokenData) {
       this.logger.error(`Error tokenData is empty`);
