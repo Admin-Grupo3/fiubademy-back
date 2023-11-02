@@ -14,6 +14,7 @@ import { Categories } from '../categories/categories.entity';
 import { Users } from '../users/users.entity';
 import { Languages } from '../languages/languages.entity';
 import { CoursesExams } from '../courses-exams/courses-exams.entity';
+import { Purchases } from '../purchases/purchases.entity';
 
 @Entity('courses')
 export class Courses extends BaseEntity {
@@ -60,6 +61,9 @@ export class Courses extends BaseEntity {
   @OneToMany(() => CoursesExams, (exam) => exam.course)
   @JoinTable()
   exams: CoursesExams[];
+  
+  @OneToMany(() => Purchases, (purchase) => purchase.course)
+  purchases: Purchases[];
 
   @CreateDateColumn()
   createdAt: Date;
@@ -67,3 +71,5 @@ export class Courses extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+

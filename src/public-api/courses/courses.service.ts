@@ -22,7 +22,7 @@ export class CoursesService {
   async findById(id: string): Promise<Courses> {
     return await this.coursesRepository.findOne({
       where: { id },
-      relations: ['categories', 'creator', 'exams', 'exams.questions'],
+      relations: ['categories', 'creator', 'exams', 'exams.questions', 'purchases'],
     });
   }
 

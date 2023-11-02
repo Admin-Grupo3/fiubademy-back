@@ -20,6 +20,8 @@ import { CategoriesManagerService } from './categoriesManager.service';
 import { CoursesExamService } from './courses-exams/courses-exams.service';
 import { CoursesExams } from './courses-exams/courses-exams.entity';
 import { CoursesQuestions } from './courses-exams/courses-questions/courses-questions.entity';
+import { PurchasesService } from './purchases/pruchases.service';
+import { Purchases } from './purchases/purchases.entity';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { CoursesQuestions } from './courses-exams/courses-questions/courses-ques
       Users,
       CoursesExams,
       CoursesQuestions,
+      Purchases
     ]),
     JwtModule.register({
       global: true,
@@ -53,6 +56,7 @@ import { CoursesQuestions } from './courses-exams/courses-questions/courses-ques
     CategoriesManagerService,
     UsersService,
     CoursesExamService,
+    PurchasesService
   ],
   exports: [],
 })
