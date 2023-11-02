@@ -131,4 +131,47 @@ export class CoursesController {
     }
     return result;
   }
+
+  @UseGuards(LocalAuthGuard, RolesGuard)
+  @RolesAccess(ROLES.STANDARD_USER)
+  @Post('courses/:id/purchase')
+  async purchaseCourse(
+    @Param('id') courseId: string,
+    @TokenData() tokenData: AuthTokenData,
+    @Res() response: Response,
+  ) {
+    try {
+      const userId = tokenData.sub;
+      const result = await this.coursesManagerService.purchaseCourse(userId, courseId);
+      return response.send(result);
+    } catch (error) {
+      this.logger.error(error);
+      if (error.code === 14) {
+        throw new HttpException('Service Unavailable', HttpStatus.SERVICE_UNAVAILABLE);
+      }
+      this.logger.warn(error);
+      throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @UseGuards(LocalAuthGuard, RolesGuard)
+  @RolesAccess(ROLES.STANDARD_USER)
+  @Get('courses/purchase')
+  async getPurchaseCourse(
+    @TokenData() tokenData: AuthTokenData,
+    @Res() response: Response,
+  ) {
+    try {
+      const userId = tokenData.sub;
+      const result = await this.coursesManagerService.getPurchaseCourses(userId);
+      return response.send(result);
+    } catch (error) {
+      this.logger.error(error);
+      if (error.code === 14) {
+        throw new HttpException('Service Unavailable', HttpStatus.SERVICE_UNAVAILABLE);
+      }
+      this.logger.warn(error);
+      throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

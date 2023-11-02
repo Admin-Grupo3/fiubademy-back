@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Courses } from '../courses/courses.entity';
+import { Purchases } from '../purchases/purchases.entity';
 
 export const ROLES = {
   STANDARD_USER: 'standard-user',
@@ -29,6 +30,9 @@ export class Users extends BaseEntity {
   @OneToMany(() => Courses, (course) => course.id)
   myCourses: Courses[];
 
+  @OneToMany(() => Purchases, (purchase) => purchase.user)
+  purchases: Purchases[];
+  
   @CreateDateColumn()
   createdAt: Date;
 

@@ -17,11 +17,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Languages } from './languages/languages.entity';
 import { CategoriesController } from './controllers/categories/categories.controller';
 import { CategoriesManagerService } from './categoriesManager.service';
+import { PurchasesService } from './purchases/pruchases.service';
+import { Purchases } from './purchases/purchases.entity';
 
 @Module({
   imports: [
     AuthenticationModule,
-    TypeOrmModule.forFeature([Categories, Courses, Languages, Users]),
+    TypeOrmModule.forFeature([Categories, Courses, Languages, Users, Purchases]),
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
@@ -37,6 +39,7 @@ import { CategoriesManagerService } from './categoriesManager.service';
     UsersManagerService,
     CategoriesManagerService,
     UsersService,
+    PurchasesService
   ],
   exports: [],
 })

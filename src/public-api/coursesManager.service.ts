@@ -3,6 +3,7 @@ import { CoursesService } from './courses/courses.service';
 import { UsersService } from './users/users.service';
 import { LanguagesService } from './languages/languages.service';
 import { CategoriesService } from './categories/categories.service';
+import { PurchasesService } from './purchases/pruchases.service';
 
 @Injectable()
 export class CoursesManagerService {
@@ -12,6 +13,8 @@ export class CoursesManagerService {
     private readonly usersService: UsersService,
     private readonly languagesService: LanguagesService,
     private readonly categoriesService: CategoriesService,
+    private readonly purchasesService: PurchasesService,
+
   ) {}
 
   async getCourses(title?: string, category?: number) {
@@ -98,6 +101,51 @@ export class CoursesManagerService {
 
     return {
       courseData: JSON.stringify(courseData),
+    };
+  }
+
+  async purchaseCourse(userId: string, courseId: string) {
+    try {
+      const user = await this.usersService.findById(userId);
+      const course = await this.coursesService.findById(courseId);
+
+      if (!user) {
+        throw new HttpException('User doesnt exists', HttpStatus.BAD_REQUEST);
+      }
+
+      if (!course) {
+        throw new HttpException('Course doesnt exists', HttpStatus.BAD_REQUEST);
+      }
+      
+      const alreadyPurchased = user.purchases.some((c) => c.course.id === courseId);
+
+      console.log("Course:", course)
+
+      if (alreadyPurchased) {
+        throw new HttpException('Course already purchased', HttpStatus.BAD_REQUEST);
+      }
+
+      return await this.purchasesService.create({
+        course,
+        user,
+      });
+
+    } catch (error) {
+      throw new HttpException(`Error al realizar la compra: ${error.message}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async getPurchaseCourses(userId: string) {
+    let coursesIds = await this.purchasesService.findByUserId(userId);
+    
+    const courses = [];
+
+    coursesIds.forEach(async (userCourse) => {
+      courses.push(userCourse.course);
+    })
+
+    return {
+      courses,
     };
   }
 }

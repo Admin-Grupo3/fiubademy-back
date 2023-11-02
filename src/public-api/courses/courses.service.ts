@@ -20,12 +20,12 @@ export class CoursesService {
     console.log(
       await this.coursesRepository.findOne({
         where: { id },
-        relations: ['categories', 'creator'],
+        relations: ['categories', 'creator', 'purchases'],
       }),
     );
     return this.coursesRepository.findOne({
       where: { id },
-      relations: ['categories', 'creator'],
+      relations: ['categories', 'creator', 'purchases'],
     });
   }
 
