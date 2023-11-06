@@ -44,7 +44,7 @@ export class CoursesController {
     @Res() response: Response,
   ) {
     this.logger.log('createCourse');
-    const { title, language: lang, categoryIds } = request;
+    const { title, language: lang, categoryIds, description, price } = request;
     let result: CreateCourseResult;
 
     const languageCode = ISO6391.getLanguages([lang]);
@@ -59,6 +59,8 @@ export class CoursesController {
         languageCode[0].name.toLowerCase(),
         categoryIds,
         tokenData.email,
+        description,
+        price
       );
     } catch (error) {
       this.logger.error(error);

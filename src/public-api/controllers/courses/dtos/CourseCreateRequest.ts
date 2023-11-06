@@ -9,4 +9,10 @@ export class CourseCreateRequest {
 
   // @ApiProperty()
   categoryIds: number[];
+
+  // @ApiProperty()
+  description: string;
+
+  // @ApiProperty()
+  price: number
 }

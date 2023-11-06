@@ -61,6 +61,8 @@ export class CoursesManagerService {
     language: string,
     categoryIds: number[],
     email: string,
+    description: string,
+    price: number
   ) {
     this.logger.log(`createCourse: ${title}`);
 
@@ -78,7 +80,7 @@ export class CoursesManagerService {
 
     // find categories from the array of ids
     const categories = [];
-    categoryIds.forEach(async (categoryId) => {
+    for (const categoryId of categoryIds) {
       const category = await this.categoriesService.findById(categoryId);
       if (!category) {
         throw new HttpException(
@@ -87,13 +89,15 @@ export class CoursesManagerService {
         );
       }
       categories.push(category);
-    });
+    };
 
     course = await this.coursesService.create({
       title,
       creator: user,
       language: lang,
       categories,
+      description,
+      price
     });
 
     const courseData = {

@@ -22,20 +22,20 @@ export class CoursesService {
   async findById(id: string): Promise<Courses> {
     return await this.coursesRepository.findOne({
       where: { id },
-      relations: ['categories', 'creator', 'exams', 'exams.questions', 'purchases'],
+      relations: ['categories', 'creator', 'exams', 'exams.questions', 'purchases', 'language'],
     });
   }
 
   findByTitle(title: string): Promise<Courses> {
     return this.coursesRepository.findOne({
       where: { title },
-      relations: ['categories', 'creator', 'exams', 'exams.questions'],
+      relations: ['categories', 'creator', 'exams', 'exams.questions', 'language', 'purchases'],
     });
   }
 
   findAll(): Promise<Courses[]> {
     return this.coursesRepository.find({
-      relations: ['categories', 'creator'],
+      relations: ['categories', 'creator', 'language'],
     });
   }
 
@@ -43,7 +43,7 @@ export class CoursesService {
     // find course by category relation
     return this.coursesRepository.find({
       where: { categories: { id: categoryId } },
-      relations: ['categories', 'creator'],
+      relations: ['categories', 'creator', 'language'],
     });
   }
 

@@ -10,4 +10,8 @@ export class CreateCourseDto {
   categories: Categories[];
 
   language: Languages;
+
+  description: string;
+
+  price: number;
 }
