@@ -5,7 +5,6 @@ import { CoursesExams } from './courses-exams.entity';
 import { CreateCourseExamDto } from './dtos/CreateCourseExam';
 import { CoursesQuestions } from './courses-questions/courses-questions.entity';
 import { v4 as uuidv4 } from 'uuid';
-import e from 'express';
 
 @Injectable()
 export class CoursesExamService {

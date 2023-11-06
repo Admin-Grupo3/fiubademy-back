@@ -22,7 +22,13 @@ export class CoursesService {
   async findById(id: string): Promise<Courses> {
     return await this.coursesRepository.findOne({
       where: { id },
-      relations: ['categories', 'creator', 'exams', 'exams.questions', 'purchases'],
+      relations: [
+        'categories',
+        'creator',
+        'exams',
+        'exams.questions',
+        'purchases',
+      ],
     });
   }
 
@@ -92,5 +98,34 @@ export class CoursesService {
     await this.coursesExamService.delete(examId);
 
     return await this.coursesRepository.save(course);
+  }
+
+  async correctExam(courseId: string, examId: string, answers: any) {
+    const exam = await this.getExam(courseId, examId);
+
+    // check if all answers are correct
+    const correctAnswers = exam.questions.map((question) => {
+      return question.correctAnswerId === answers[question.id];
+    });
+
+    // reduce correct answers to a single object with question id as key
+    const correctAnswersObject = exam.questions.reduce((acc, question) => {
+      acc[question.id] = question.answers.find(
+        (answer) => answer.id === question.correctAnswerId,
+      ).answer;
+      return acc;
+    }, {});
+
+    // calculate score
+    const score = correctAnswers.filter((answer) => answer === true).length;
+
+    // average score
+    const averageScore = score / exam.questions.length;
+
+    return {
+      examName: exam.name,
+      avgScore: averageScore,
+      correctAnswers: correctAnswersObject,
+    };
   }
 }

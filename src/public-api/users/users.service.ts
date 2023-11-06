@@ -35,10 +35,22 @@ export class UsersService {
     return await this.usersRepository.findOne({
       where: { id },
       relations: ['purchases', 'purchases.course'],
-    })
+    });
   }
 
   findByEmail(email: string): Promise<Users> {
     return this.usersRepository.findOneBy({ email });
+  }
+
+  addExamTaken(userId: string, examId: string, name: string, avgScore: number) {
+    return this.usersRepository
+      .createQueryBuilder()
+      .update()
+      .set({
+        examsTaken: () =>
+          `exams_taken || '{"examId": "${examId}", "name": "${name}", "avgScore": ${avgScore}, "createdAt": "${new Date().toISOString()}"}'`,
+      })
+      .where('id = :id', { id: userId })
+      .execute();
   }
 }
