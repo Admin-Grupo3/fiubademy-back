@@ -5,6 +5,7 @@ import { LanguagesService } from './languages/languages.service';
 import { CategoriesService } from './categories/categories.service';
 import { CreateCourseExamDto } from './courses-exams/dtos/CreateCourseExam';
 import { PurchasesService } from './purchases/pruchases.service';
+import ISO6391 from 'iso-639-1';
 
 @Injectable()
 export class CoursesManagerService {
@@ -53,6 +54,25 @@ export class CoursesManagerService {
       );
     }
 
+    const language = ISO6391.getLanguages([data.language])[0].name.toLowerCase();
+    const lang = await this.languagesService.findByName(language);
+    if (!lang) {
+      throw new HttpException('Language doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+    data.language = lang;
+
+    const categories = [];
+    for (const categoryId of data.categoryIds) {
+      const category = await this.categoriesService.findById(categoryId);
+      if (!category) {
+        throw new HttpException(
+          'One of the categories doesnt exist',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      categories.push(category);
+    };
+    data.categoryIds = categories
     return await this.coursesService.update(courseId, data);
   }
 

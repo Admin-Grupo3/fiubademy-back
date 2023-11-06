@@ -55,7 +55,11 @@ export class CoursesService {
         course[key] = data[key];
       }
     });
-    return await this.coursesRepository.save(course);
+    course.categories = [];
+    await this.coursesRepository.save(course);  
+    course.categories = data.categoryIds;
+  
+    return await this.coursesRepository.save(course);;
   }
 
   async delete(courseId: string) {
