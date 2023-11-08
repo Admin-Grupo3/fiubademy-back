@@ -115,4 +115,19 @@ export class UsersManagerService {
       userData: JSON.stringify(userData),
     };
   }
+
+  changePassword(userId: string, oldPassword: string, newPassword: string) {
+    this.logger.log(`changePassword: ${userId}`);
+    return this.usersService.changePassword(userId, oldPassword, newPassword);
+  }
+
+  async profile(userId: string) {
+    this.logger.log(`profile: ${userId}`);
+    const user = await this.usersService.findById(userId);
+    return {
+      id: user.id,
+      email: user.email,
+      roles: user.roles as unknown as string[],
+    };
+  }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Logger,
@@ -19,6 +20,8 @@ import { TokenData } from 'src/public-api/authentication/tokenData.decorator';
 import { CoursesManagerService } from 'src/public-api/coursesManager.service';
 import { ExamTakeRequest } from './dtos/ExamTakeRequest.dto';
 import { ExamTakeResponse } from './dtos/ExamTakeResponse.dto';
+import { ChangePasswordRequest } from './dtos/ChangePassword.dto';
+import { UsersProfileResponse } from './dtos/UsersProfile.dto';
 
 interface SignIn {
   userData: string;
@@ -118,5 +121,32 @@ export class UsersController {
       answers,
     );
     return exam.exam;
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('users/update/password')
+  async changePassword(
+    @TokenData() tokenData: AuthTokenData,
+    @Body() request: ChangePasswordRequest,
+  ) {
+    const { oldPassword, newPassword } = request;
+    const userId = tokenData.sub;
+    await this.usersManagerService.changePassword(
+      userId,
+      oldPassword,
+      newPassword,
+    );
+    return {
+      message: 'Password changed successfully',
+    };
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Get('users/profile')
+  async getProfile(
+    @TokenData() tokenData: AuthTokenData,
+  ): Promise<UsersProfileResponse> {
+    const userId = tokenData.sub;
+    return await this.usersManagerService.profile(userId);
   }
 }

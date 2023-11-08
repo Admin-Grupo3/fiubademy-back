@@ -3,6 +3,7 @@ import { Users } from './users.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/createUser.dto';
+import { sha256 } from 'js-sha256';
 
 @Injectable()
 export class UsersService {
@@ -52,5 +53,21 @@ export class UsersService {
       })
       .where('id = :id', { id: userId })
       .execute();
+  }
+
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string,
+  ) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    const salt = process.env.SALT_HASH;
+    const isMatch = (await sha256(oldPassword + salt)) === user.password;
+    if (!isMatch) {
+      throw new Error('Invalid credentials');
+    }
+    return await this.usersRepository.update(userId, {
+      password: newPassword,
+    });
   }
 }
