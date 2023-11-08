@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Logger,
+  Param,
   Post,
   Res,
   UseGuards,
@@ -13,6 +14,11 @@ import { UserSignUpRequest } from './dtos/UserSignUpRequest.dto';
 import { Response } from 'express';
 import { UsersManagerService } from 'src/public-api/usersManager.service';
 import { LocalAuthGuard } from 'src/public-api/authentication/local.auth.guard';
+import { AuthTokenData } from 'src/public-api/authentication/dtos/AuthTokenData.dto';
+import { TokenData } from 'src/public-api/authentication/tokenData.decorator';
+import { CoursesManagerService } from 'src/public-api/coursesManager.service';
+import { ExamTakeRequest } from './dtos/ExamTakeRequest.dto';
+import { ExamTakeResponse } from './dtos/ExamTakeResponse.dto';
 
 interface SignIn {
   userData: string;
@@ -24,7 +30,10 @@ interface SignIn {
 export class UsersController {
   private logger = new Logger(this.constructor.name);
 
-  constructor(private usersManagerService: UsersManagerService) {}
+  constructor(
+    private coursesManagerService: CoursesManagerService,
+    private usersManagerService: UsersManagerService,
+  ) {}
 
   @Post('users/signin')
   async signIn(@Body() request: UserSignInRequest, @Res() response: Response) {
@@ -90,5 +99,24 @@ export class UsersController {
   @Post('users/logout')
   async logOut(@Res() response: Response) {
     return this.usersManagerService.removeTokenCookie(response);
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('users/course/:courseId/exams/:examId')
+  async ExamTake(
+    @TokenData() tokenData: AuthTokenData,
+    @Param() { courseId, examId }: { courseId: string; examId: string },
+    @Body() request: ExamTakeRequest,
+  ): Promise<ExamTakeResponse> {
+    const userId = tokenData.sub;
+    const { answers } = request;
+
+    const exam = await this.coursesManagerService.correctExamFromCourse(
+      userId,
+      courseId,
+      examId,
+      answers,
+    );
+    return exam.exam;
   }
 }

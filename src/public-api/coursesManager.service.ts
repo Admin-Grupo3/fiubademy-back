@@ -5,6 +5,7 @@ import { LanguagesService } from './languages/languages.service';
 import { CategoriesService } from './categories/categories.service';
 import { CreateCourseExamDto } from './courses-exams/dtos/CreateCourseExam';
 import { PurchasesService } from './purchases/pruchases.service';
+import { answer } from './controllers/users/dtos/ExamTakeRequest.dto';
 
 @Injectable()
 export class CoursesManagerService {
@@ -15,7 +16,6 @@ export class CoursesManagerService {
     private readonly languagesService: LanguagesService,
     private readonly categoriesService: CategoriesService,
     private readonly purchasesService: PurchasesService,
-
   ) {}
 
   async getCourses(title?: string, category?: number) {
@@ -163,6 +163,42 @@ export class CoursesManagerService {
     };
   }
 
+  async correctExamFromCourse(
+    userId: string,
+    courseId: string,
+    examId: string,
+    answers: answer[],
+  ) {
+    this.logger.log(`correctExam: ${courseId}`);
+    const course = await this.coursesService.findById(courseId);
+    if (!course) {
+      throw new HttpException('Course doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new HttpException('User doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+
+    const exam = await this.coursesService.correctExam(
+      courseId,
+      examId,
+      answers,
+    );
+
+    // add exam to user
+    await this.usersService.addExamTaken(
+      userId,
+      examId,
+      exam.examName,
+      exam.avgScore,
+    );
+
+    return {
+      exam,
+    };
+  }
+
   async getExamFromCourse(courseId: string, examId: string) {
     this.logger.log(`getExam: ${courseId}`);
     const exam = await this.coursesService.getExam(courseId, examId);
@@ -192,33 +228,40 @@ export class CoursesManagerService {
       if (!course) {
         throw new HttpException('Course doesnt exists', HttpStatus.BAD_REQUEST);
       }
-      
-      const alreadyPurchased = user.purchases.some((c) => c.course.id === courseId);
 
-      console.log("Course:", course)
+      const alreadyPurchased = user.purchases.some(
+        (c) => c.course.id === courseId,
+      );
+
+      console.log('Course:', course);
 
       if (alreadyPurchased) {
-        throw new HttpException('Course already purchased', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'Course already purchased',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       return await this.purchasesService.create({
         course,
         user,
       });
-
     } catch (error) {
-      throw new HttpException(`Error al realizar la compra: ${error.message}`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        `Error al realizar la compra: ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
   async getPurchaseCourses(userId: string) {
-    let coursesIds = await this.purchasesService.findByUserId(userId);
-    
+    const coursesIds = await this.purchasesService.findByUserId(userId);
+
     const courses = [];
 
     coursesIds.forEach(async (userCourse) => {
       courses.push(userCourse.course);
-    })
+    });
 
     return {
       courses,
