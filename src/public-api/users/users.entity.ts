@@ -32,7 +32,20 @@ export class Users extends BaseEntity {
 
   @OneToMany(() => Purchases, (purchase) => purchase.user)
   purchases: Purchases[];
-  
+
+  @Column({
+    type: 'jsonb',
+    array: false,
+    default: () => "'[]'",
+    nullable: false,
+  })
+  examsTaken: {
+    examId: string;
+    name: string;
+    avgScore: number;
+    createdAt: Date;
+  }[];
+
   @CreateDateColumn()
   createdAt: Date;
 
