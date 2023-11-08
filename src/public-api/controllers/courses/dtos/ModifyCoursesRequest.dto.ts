@@ -5,5 +5,14 @@ export class ModifyCoursesRequest {
   title?: string;
 
   // @ApiProperty()
-  category?: number;
+  categories?: number[];
+
+  // @ApiProperty()
+  price?: number;
+
+  // @ApiProperty()
+  description?: string;
+
+  // @ApiProperty()
+  language: string;
 }

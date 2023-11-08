@@ -5,7 +5,9 @@ import { LanguagesService } from './languages/languages.service';
 import { CategoriesService } from './categories/categories.service';
 import { CreateCourseExamDto } from './courses-exams/dtos/CreateCourseExam';
 import { PurchasesService } from './purchases/pruchases.service';
+import ISO6391 from 'iso-639-1';
 import { answer } from './controllers/users/dtos/ExamTakeRequest.dto';
+
 
 @Injectable()
 export class CoursesManagerService {
@@ -53,6 +55,25 @@ export class CoursesManagerService {
       );
     }
 
+    const language = ISO6391.getLanguages([data.language])[0].name.toLowerCase();
+    const lang = await this.languagesService.findByName(language);
+    if (!lang) {
+      throw new HttpException('Language doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+    data.language = lang;
+
+    const categories = [];
+    for (const categoryId of data.categoryIds) {
+      const category = await this.categoriesService.findById(categoryId);
+      if (!category) {
+        throw new HttpException(
+          'One of the categories doesnt exist',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      categories.push(category);
+    };
+    data.categoryIds = categories
     return await this.coursesService.update(courseId, data);
   }
 
@@ -61,6 +82,8 @@ export class CoursesManagerService {
     language: string,
     categoryIds: number[],
     email: string,
+    description: string,
+    price: number
   ) {
     this.logger.log(`createCourse: ${title}`);
 
@@ -78,7 +101,7 @@ export class CoursesManagerService {
 
     // find categories from the array of ids
     const categories = [];
-    categoryIds.forEach(async (categoryId) => {
+    for (const categoryId of categoryIds) {
       const category = await this.categoriesService.findById(categoryId);
       if (!category) {
         throw new HttpException(
@@ -87,13 +110,15 @@ export class CoursesManagerService {
         );
       }
       categories.push(category);
-    });
+    };
 
     course = await this.coursesService.create({
       title,
       creator: user,
       language: lang,
       categories,
+      description,
+      price
     });
 
     const courseData = {
