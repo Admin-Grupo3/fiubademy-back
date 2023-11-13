@@ -14,4 +14,6 @@ export class CreateCourseDto {
   description: string;
 
   price: number;
+
+  companyName: string;
 }

@@ -44,6 +44,8 @@ export class UsersService {
   }
 
   addExamTaken(userId: string, examId: string, name: string, avgScore: number) {
+    // TODO: check if examId belong to a course that has a company set, if so add exam as certifications
+
     return this.usersRepository
       .createQueryBuilder()
       .update()
