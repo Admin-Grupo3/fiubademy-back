@@ -14,4 +14,10 @@ export class CreateCourseDto {
   description: string;
 
   price: number;
+
+  what_will_you_learn: string[];
+
+  content: string[];
+
+  video: string;
 }

@@ -14,5 +14,14 @@ export class CourseCreateRequest {
   description: string;
 
   // @ApiProperty()
-  price: number
+  price: number;
+
+  // @ApiProperty()
+  what_will_you_learn: string[];
+
+  // @ApiProperty()
+  content: string[];
+
+  // @ApiProperty()
+  video: string;
 }

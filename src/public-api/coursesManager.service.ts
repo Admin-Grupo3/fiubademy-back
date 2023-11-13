@@ -83,7 +83,10 @@ export class CoursesManagerService {
     categoryIds: number[],
     email: string,
     description: string,
-    price: number
+    price: number,
+    what_will_you_learn: string[],
+    content: string[],
+    video: string
   ) {
     this.logger.log(`createCourse: ${title}`);
 
@@ -118,7 +121,10 @@ export class CoursesManagerService {
       language: lang,
       categories,
       description,
-      price
+      price,
+      what_will_you_learn,
+      content,
+      video
     });
 
     const courseData = {
