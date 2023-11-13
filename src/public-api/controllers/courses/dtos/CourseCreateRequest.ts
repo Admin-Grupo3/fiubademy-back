@@ -14,5 +14,8 @@ export class CourseCreateRequest {
   description: string;
 
   // @ApiProperty()
-  price: number
+  price: number;
+
+  // @ApiProperty()
+  companyName?: string;
 }

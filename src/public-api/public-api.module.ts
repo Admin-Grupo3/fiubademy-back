@@ -22,6 +22,7 @@ import { CoursesExams } from './courses-exams/courses-exams.entity';
 import { CoursesQuestions } from './courses-exams/courses-questions/courses-questions.entity';
 import { PurchasesService } from './purchases/pruchases.service';
 import { Purchases } from './purchases/purchases.entity';
+import { Company } from './company/company.entity';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { Purchases } from './purchases/purchases.entity';
       Users,
       CoursesExams,
       CoursesQuestions,
-      Purchases
+      Purchases,
+      Company,
     ]),
     JwtModule.register({
       global: true,
@@ -56,7 +58,7 @@ import { Purchases } from './purchases/purchases.entity';
     CategoriesManagerService,
     UsersService,
     CoursesExamService,
-    PurchasesService
+    PurchasesService,
   ],
   exports: [],
 })
