@@ -12,6 +12,7 @@ export class CoursesService {
   constructor(
     @InjectRepository(Courses)
     private readonly coursesRepository: Repository<Courses>,
+    @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
     private coursesExamService: CoursesExamService,
   ) {}
@@ -32,6 +33,7 @@ export class CoursesService {
       }
       company = companyDb;
     }
+    delete body.companyName;
     const newTask: Courses = this.coursesRepository.create({
       ...body,
       company,

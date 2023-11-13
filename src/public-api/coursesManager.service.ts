@@ -8,7 +8,6 @@ import { PurchasesService } from './purchases/pruchases.service';
 import ISO6391 from 'iso-639-1';
 import { answer } from './controllers/users/dtos/ExamTakeRequest.dto';
 
-
 @Injectable()
 export class CoursesManagerService {
   private logger = new Logger(this.constructor.name);
@@ -55,7 +54,9 @@ export class CoursesManagerService {
       );
     }
 
-    const language = ISO6391.getLanguages([data.language])[0].name.toLowerCase();
+    const language = ISO6391.getLanguages([
+      data.language,
+    ])[0].name.toLowerCase();
     const lang = await this.languagesService.findByName(language);
     if (!lang) {
       throw new HttpException('Language doesnt exists', HttpStatus.BAD_REQUEST);
@@ -72,8 +73,8 @@ export class CoursesManagerService {
         );
       }
       categories.push(category);
-    };
-    data.categoryIds = categories
+    }
+    data.categoryIds = categories;
     return await this.coursesService.update(courseId, data);
   }
 
@@ -83,7 +84,8 @@ export class CoursesManagerService {
     categoryIds: number[],
     email: string,
     description: string,
-    price: number
+    price: number,
+    companyName?: string,
   ) {
     this.logger.log(`createCourse: ${title}`);
 
@@ -110,7 +112,7 @@ export class CoursesManagerService {
         );
       }
       categories.push(category);
-    };
+    }
 
     course = await this.coursesService.create({
       title,
@@ -118,7 +120,8 @@ export class CoursesManagerService {
       language: lang,
       categories,
       description,
-      price
+      price,
+      companyName,
     });
 
     const courseData = {

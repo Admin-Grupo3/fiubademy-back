@@ -44,7 +44,14 @@ export class CoursesController {
     @Res() response: Response,
   ) {
     this.logger.log('createCourse');
-    const { title, language: lang, categoryIds, description, price } = request;
+    const {
+      title,
+      language: lang,
+      categoryIds,
+      description,
+      price,
+      companyName,
+    } = request;
     let result: CreateCourseResult;
 
     const languageCode = ISO6391.getLanguages([lang]);
@@ -60,7 +67,8 @@ export class CoursesController {
         categoryIds,
         tokenData.email,
         description,
-        price
+        price,
+        companyName,
       );
     } catch (error) {
       this.logger.error(error);
@@ -261,13 +269,11 @@ export class CoursesController {
           'Service Unavailable',
           HttpStatus.SERVICE_UNAVAILABLE,
         );
-
       }
       this.logger.warn(error);
       throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
     }
     return result;
-
   }
 
   @UseGuards(LocalAuthGuard, RolesGuard)
@@ -280,12 +286,18 @@ export class CoursesController {
   ) {
     try {
       const userId = tokenData.sub;
-      const result = await this.coursesManagerService.purchaseCourse(userId, courseId);
+      const result = await this.coursesManagerService.purchaseCourse(
+        userId,
+        courseId,
+      );
       return response.send(result);
     } catch (error) {
       this.logger.error(error);
       if (error.code === 14) {
-        throw new HttpException('Service Unavailable', HttpStatus.SERVICE_UNAVAILABLE);
+        throw new HttpException(
+          'Service Unavailable',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
       }
       this.logger.warn(error);
       throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
@@ -301,12 +313,17 @@ export class CoursesController {
   ) {
     try {
       const userId = tokenData.sub;
-      const result = await this.coursesManagerService.getPurchaseCourses(userId);
+      const result = await this.coursesManagerService.getPurchaseCourses(
+        userId,
+      );
       return response.send(result);
     } catch (error) {
       this.logger.error(error);
       if (error.code === 14) {
-        throw new HttpException('Service Unavailable', HttpStatus.SERVICE_UNAVAILABLE);
+        throw new HttpException(
+          'Service Unavailable',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
       }
       this.logger.warn(error);
       throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
