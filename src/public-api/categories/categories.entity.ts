@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { Courses } from '../courses/courses.entity';
+import { Users } from '../users/users.entity';
 
 @Entity('categories')
 export class Categories extends BaseEntity {
@@ -26,4 +27,7 @@ export class Categories extends BaseEntity {
 
   @ManyToMany(() => Courses, (course) => course.id)
   courses: Courses[];
+
+  @ManyToMany(() => Users, (user) => user.id)
+  users: Users[];
 }

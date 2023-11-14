@@ -6,4 +6,10 @@ export class UserSignUpRequest {
 
   // @ApiProperty()
   password: string;
+  
+  // @ApiProperty()
+  firstName: string;
+
+  // @ApiProperty()
+  lastName: string;
 }
