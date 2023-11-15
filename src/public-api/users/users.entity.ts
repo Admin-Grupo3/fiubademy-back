@@ -5,9 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable
 } from 'typeorm';
 import { Courses } from '../courses/courses.entity';
 import { Purchases } from '../purchases/purchases.entity';
+import { Categories } from '../categories/categories.entity';
 
 export const ROLES = {
   STANDARD_USER: 'standard-user',
@@ -20,6 +23,12 @@ export class Users extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
+
+  @Column({ type: 'varchar', length: 255})
+  firstName: string;
+
+  @Column({ type: 'varchar', length: 255})
+  lastName: string;
 
   @Column({ type: 'varchar', length: 255 })
   password: unknown;
@@ -46,9 +55,17 @@ export class Users extends BaseEntity {
     createdAt: Date;
   }[];
 
+  @Column({ type: 'date', nullable: true }) 
+  birthDate: Date; 
+
+  @ManyToMany(() => Categories, (category) => category.id)
+  @JoinTable()
+  interests: Categories[];
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 }
+

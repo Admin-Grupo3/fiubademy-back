@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { sha256 } from 'js-sha256';
+import { Categories } from '../categories/categories.entity';
 
 @Injectable()
 export class UsersService {
@@ -35,7 +36,7 @@ export class UsersService {
   async findById(id: string) {
     return await this.usersRepository.findOne({
       where: { id },
-      relations: ['purchases', 'purchases.course'],
+      relations: ['purchases', 'purchases.course', 'interests'],
     });
   }
 
@@ -71,5 +72,23 @@ export class UsersService {
     return await this.usersRepository.update(userId, {
       password: newPassword,
     });
+  }
+
+  async changeProfile(
+    userId: string,
+    firstName: string,
+    lastName: string,
+    birthDate: Date,
+    categories: Categories[]
+  ) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.birthDate = birthDate;
+    user.interests = [];
+
+    user.interests = categories;
+    return await this.usersRepository.save(user);
+
   }
 }

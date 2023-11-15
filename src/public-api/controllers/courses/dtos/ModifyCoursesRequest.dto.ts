@@ -15,4 +15,14 @@ export class ModifyCoursesRequest {
 
   // @ApiProperty()
   language: string;
+
+  // @ApiProperty()
+  what_will_you_learn?: string[];
+
+  // @ApiProperty()
+  content?: string[];
+
+  // @ApiProperty()
+  video?: string;
+
 }

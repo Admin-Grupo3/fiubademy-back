@@ -74,4 +74,7 @@ export class Courses extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column( {type: 'varchar', nullable: true, default: ''})
+  video: string;
 }
