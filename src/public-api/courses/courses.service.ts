@@ -5,17 +5,39 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCourseDto } from './dtos/createCourse.dto';
 import { CoursesExamService } from '../courses-exams/courses-exams.service';
 import { CreateCourseExamDto } from '../courses-exams/dtos/CreateCourseExam';
+import { Company } from '../company/company.entity';
 
 @Injectable()
 export class CoursesService {
   constructor(
     @InjectRepository(Courses)
     private readonly coursesRepository: Repository<Courses>,
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>,
     private coursesExamService: CoursesExamService,
   ) {}
 
   async create(body: CreateCourseDto) {
-    const newTask: Courses = this.coursesRepository.create(body);
+    let company = undefined;
+    if (body.companyName !== '') {
+      const companyDb = await this.companyRepository.findOne({
+        where: { title: body.companyName },
+      });
+      // create company if doesnt exist
+      if (!companyDb) {
+        const newCompany = this.companyRepository.create({
+          title: body.companyName,
+        });
+        await this.companyRepository.save(newCompany);
+        company = newCompany;
+      }
+      company = companyDb;
+    }
+    delete body.companyName;
+    const newTask: Courses = this.coursesRepository.create({
+      ...body,
+      company,
+    });
     return await this.coursesRepository.save(newTask);
   }
 
@@ -23,14 +45,28 @@ export class CoursesService {
     return await this.coursesRepository.findOne({
       where: { id },
 
-      relations: ['categories', 'creator', 'exams', 'exams.questions', 'purchases', 'language'],
+      relations: [
+        'categories',
+        'creator',
+        'exams',
+        'exams.questions',
+        'purchases',
+        'language',
+      ],
     });
   }
 
   findByTitle(title: string): Promise<Courses> {
     return this.coursesRepository.findOne({
       where: { title },
-      relations: ['categories', 'creator', 'exams', 'exams.questions', 'language', 'purchases'],
+      relations: [
+        'categories',
+        'creator',
+        'exams',
+        'exams.questions',
+        'language',
+        'purchases',
+      ],
     });
   }
 
@@ -57,10 +93,10 @@ export class CoursesService {
       }
     });
     course.categories = [];
-    await this.coursesRepository.save(course);  
+    await this.coursesRepository.save(course);
     course.categories = data.categoryIds;
-  
-    return await this.coursesRepository.save(course);;
+
+    return await this.coursesRepository.save(course);
   }
 
   async delete(courseId: string) {

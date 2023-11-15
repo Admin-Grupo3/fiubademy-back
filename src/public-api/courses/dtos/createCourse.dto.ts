@@ -20,4 +20,6 @@ export class CreateCourseDto {
   content: string[];
 
   video: string;
+
+  companyName: string;
 }

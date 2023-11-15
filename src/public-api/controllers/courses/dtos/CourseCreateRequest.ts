@@ -24,4 +24,7 @@ export class CourseCreateRequest {
 
   // @ApiProperty()
   video: string;
+
+  // @ApiProperty()
+  companyName?: string;
 }
