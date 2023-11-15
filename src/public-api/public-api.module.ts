@@ -26,6 +26,8 @@ import { LearningPathsController } from './controllers/learning-paths/learning-p
 import { LearningPathService } from './learning-paths/learning-path.service';
 import { LearningPaths } from './learning-paths/learning-paths.entity';
 import { LearningPathManagerService } from './learningPathManager.service';
+import { LearningPathPurchasesService } from './learning-paths-purchases/learningPathPurchases.service';
+import { LearningPathPurchases } from './learning-paths-purchases/learningPathPurchases.entity';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { LearningPathManagerService } from './learningPathManager.service';
       CoursesQuestions,
       Purchases,
       LearningPaths,
+      LearningPathPurchases,
     ]),
     JwtModule.register({
       global: true,
@@ -64,6 +67,8 @@ import { LearningPathManagerService } from './learningPathManager.service';
     CoursesExamService,
     PurchasesService,
     LearningPathService,
+    LearningPathManagerService,
+    LearningPathPurchasesService,
     LearningPathManagerService,
   ],
   exports: [],

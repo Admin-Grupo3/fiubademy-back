@@ -29,4 +29,10 @@ export class LearningPathService {
       relations: ['courses', 'creator'],
     });
   }
+
+  async findAll(): Promise<LearningPaths[]> {
+    return await this.learningPathRepository.find({
+      relations: ['courses', 'creator'],
+    });
+  }
 }

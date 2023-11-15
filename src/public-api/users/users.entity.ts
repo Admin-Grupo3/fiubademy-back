@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Courses } from '../courses/courses.entity';
 import { Purchases } from '../purchases/purchases.entity';
+import { LearningPathPurchases } from '../learning-paths-purchases/learningPathPurchases.entity';
 
 export const ROLES = {
   STANDARD_USER: 'standard-user',
@@ -32,7 +33,13 @@ export class Users extends BaseEntity {
 
   @OneToMany(() => Purchases, (purchase) => purchase.user)
   purchases: Purchases[];
-  
+
+  @OneToMany(
+    () => LearningPathPurchases,
+    (learningPathPurchase) => learningPathPurchase.user,
+  )
+  learningPathPurchases: LearningPathPurchases[];
+
   @CreateDateColumn()
   createdAt: Date;
 

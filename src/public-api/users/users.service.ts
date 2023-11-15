@@ -34,8 +34,13 @@ export class UsersService {
   async findById(id: string) {
     return await this.usersRepository.findOne({
       where: { id },
-      relations: ['purchases', 'purchases.course'],
-    })
+      relations: [
+        'purchases',
+        'purchases.course',
+        'learningPathPurchases',
+        'learningPathPurchases.learningPath',
+      ],
+    });
   }
 
   findByEmail(email: string): Promise<Users> {
