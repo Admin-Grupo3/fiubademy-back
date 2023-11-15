@@ -31,7 +31,7 @@ export class CoursesService {
         await this.companyRepository.save(newCompany);
         company = newCompany;
       }
-      company = companyDb;
+      company = companyDb ?? undefined;
     }
     delete body.companyName;
     const newTask: Courses = this.coursesRepository.create({
