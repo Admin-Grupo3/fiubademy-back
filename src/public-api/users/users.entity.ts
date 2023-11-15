@@ -6,10 +6,11 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToMany,
-  JoinTable
+  JoinTable,
 } from 'typeorm';
 import { Courses } from '../courses/courses.entity';
 import { Purchases } from '../purchases/purchases.entity';
+import { LearningPathPurchases } from '../learning-paths-purchases/learningPathPurchases.entity';
 import { Categories } from '../categories/categories.entity';
 
 export const ROLES = {
@@ -24,10 +25,10 @@ export class Users extends BaseEntity {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 255})
+  @Column({ type: 'varchar', length: 255 })
   firstName: string;
 
-  @Column({ type: 'varchar', length: 255})
+  @Column({ type: 'varchar', length: 255 })
   lastName: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -42,6 +43,11 @@ export class Users extends BaseEntity {
   @OneToMany(() => Purchases, (purchase) => purchase.user)
   purchases: Purchases[];
 
+  @OneToMany(
+    () => LearningPathPurchases,
+    (learningPathPurchase) => learningPathPurchase.user,
+  )
+  learningPathPurchases: LearningPathPurchases[];
   @Column({
     type: 'jsonb',
     array: false,
@@ -55,8 +61,8 @@ export class Users extends BaseEntity {
     createdAt: Date;
   }[];
 
-  @Column({ type: 'date', nullable: true }) 
-  birthDate: Date; 
+  @Column({ type: 'date', nullable: true })
+  birthDate: Date;
 
   @ManyToMany(() => Categories, (category) => category.id)
   @JoinTable()
@@ -68,4 +74,3 @@ export class Users extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-

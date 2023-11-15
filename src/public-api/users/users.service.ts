@@ -36,7 +36,14 @@ export class UsersService {
   async findById(id: string) {
     return await this.usersRepository.findOne({
       where: { id },
-      relations: ['purchases', 'purchases.course', 'interests'],
+
+      relations: [
+        'purchases',
+        'purchases.course',
+        'learningPathPurchases',
+        'learningPathPurchases.learningPath',
+        'interests',
+      ],
     });
   }
 
@@ -79,7 +86,7 @@ export class UsersService {
     firstName: string,
     lastName: string,
     birthDate: Date,
-    categories: Categories[]
+    categories: Categories[],
   ) {
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     user.firstName = firstName;
@@ -89,6 +96,5 @@ export class UsersService {
 
     user.interests = categories;
     return await this.usersRepository.save(user);
-
   }
 }
