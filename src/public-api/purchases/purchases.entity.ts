@@ -1,6 +1,12 @@
 import { Courses } from 'src/public-api/courses/courses.entity';
 import { Users } from 'src/public-api/users/users.entity';
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity('purchases')
 export class Purchases extends BaseEntity {

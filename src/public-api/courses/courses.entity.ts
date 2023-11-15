@@ -15,6 +15,7 @@ import { Users } from '../users/users.entity';
 import { Languages } from '../languages/languages.entity';
 import { CoursesExams } from '../courses-exams/courses-exams.entity';
 import { Purchases } from '../purchases/purchases.entity';
+import { Company } from '../company/company.entity';
 
 @Entity('courses')
 export class Courses extends BaseEntity {
@@ -49,6 +50,9 @@ export class Courses extends BaseEntity {
   @JoinTable()
   categories: Categories[];
 
+  @ManyToOne(() => Company, (company) => company.courses)
+  company: Company;
+
   @Column({ type: 'varchar', length: 255, nullable: true, default: '' })
   image: string;
 
@@ -61,7 +65,7 @@ export class Courses extends BaseEntity {
   @OneToMany(() => CoursesExams, (exam) => exam.course)
   @JoinTable()
   exams: CoursesExams[];
-  
+
   @OneToMany(() => Purchases, (purchase) => purchase.course)
   purchases: Purchases[];
 
@@ -70,6 +74,7 @@ export class Courses extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column( {type: 'varchar', nullable: true, default: ''})
+  video: string;
 }
-
-

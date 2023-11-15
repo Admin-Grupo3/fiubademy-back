@@ -20,7 +20,7 @@ import { CategoriesManagerService } from './categoriesManager.service';
 import { CoursesExamService } from './courses-exams/courses-exams.service';
 import { CoursesExams } from './courses-exams/courses-exams.entity';
 import { CoursesQuestions } from './courses-exams/courses-questions/courses-questions.entity';
-import { PurchasesService } from './purchases/pruchases.service';
+import { PurchasesService } from './purchases/purchases.service';
 import { Purchases } from './purchases/purchases.entity';
 import { LearningPathsController } from './controllers/learning-paths/learning-paths.controller';
 import { LearningPathService } from './learning-paths/learning-path.service';
@@ -28,6 +28,7 @@ import { LearningPaths } from './learning-paths/learning-paths.entity';
 import { LearningPathManagerService } from './learningPathManager.service';
 import { LearningPathPurchasesService } from './learning-paths-purchases/learningPathPurchases.service';
 import { LearningPathPurchases } from './learning-paths-purchases/learningPathPurchases.entity';
+import { Company } from './company/company.entity';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { LearningPathPurchases } from './learning-paths-purchases/learningPathPu
       Purchases,
       LearningPaths,
       LearningPathPurchases,
+      Company,
     ]),
     JwtModule.register({
       global: true,

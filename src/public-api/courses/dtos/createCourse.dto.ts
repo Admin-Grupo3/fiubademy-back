@@ -10,4 +10,16 @@ export class CreateCourseDto {
   categories: Categories[];
 
   language: Languages;
+
+  description: string;
+
+  price: number;
+
+  what_will_you_learn: string[];
+
+  content: string[];
+
+  video: string;
+
+  companyName: string;
 }
