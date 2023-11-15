@@ -50,8 +50,12 @@ export class CoursesController {
       categoryIds,
       description,
       price,
+      what_will_you_learn,
+      content,
+      video,
       companyName,
     } = request;
+
     let result: CreateCourseResult;
 
     const languageCode = ISO6391.getLanguages([lang]);
@@ -68,6 +72,9 @@ export class CoursesController {
         tokenData.email,
         description,
         price,
+        what_will_you_learn,
+        content,
+        video,
         companyName,
       );
     } catch (error) {
