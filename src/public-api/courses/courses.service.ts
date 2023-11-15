@@ -32,8 +32,10 @@ export class CoursesService {
         });
         await this.companyRepository.save(newCompany);
         company = newCompany;
+        console.log(company);
       }
-      company = companyDb ?? undefined;
+      company = companyDb;
+      console.log(company);
     }
     delete body.companyName;
     const newTask: Courses = this.coursesRepository.create({
@@ -74,7 +76,7 @@ export class CoursesService {
 
   findAll(): Promise<Courses[]> {
     return this.coursesRepository.find({
-      relations: ['categories', 'creator', 'language'],
+      relations: ['categories', 'creator', 'language', 'company'],
     });
   }
 
