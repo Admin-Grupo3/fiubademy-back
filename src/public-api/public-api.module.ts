@@ -20,7 +20,7 @@ import { CategoriesManagerService } from './categoriesManager.service';
 import { CoursesExamService } from './courses-exams/courses-exams.service';
 import { CoursesExams } from './courses-exams/courses-exams.entity';
 import { CoursesQuestions } from './courses-exams/courses-questions/courses-questions.entity';
-import { PurchasesService } from './purchases/pruchases.service';
+import { PurchasesService } from './purchases/purchases.service';
 import { Purchases } from './purchases/purchases.entity';
 import { Company } from './company/company.entity';
 

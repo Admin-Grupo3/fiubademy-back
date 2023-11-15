@@ -6,6 +6,7 @@ import { CreateCourseDto } from './dtos/createCourse.dto';
 import { CoursesExamService } from '../courses-exams/courses-exams.service';
 import { CreateCourseExamDto } from '../courses-exams/dtos/CreateCourseExam';
 import { Company } from '../company/company.entity';
+import { PurchasesService } from '../purchases/purchases.service';
 
 @Injectable()
 export class CoursesService {
@@ -14,6 +15,7 @@ export class CoursesService {
     private readonly coursesRepository: Repository<Courses>,
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
+    private purchaseService: PurchasesService,
     private coursesExamService: CoursesExamService,
   ) {}
 
@@ -31,7 +33,7 @@ export class CoursesService {
         await this.companyRepository.save(newCompany);
         company = newCompany;
       }
-      company = companyDb;
+      company = companyDb ?? undefined;
     }
     delete body.companyName;
     const newTask: Courses = this.coursesRepository.create({
@@ -101,6 +103,12 @@ export class CoursesService {
 
   async delete(courseId: string) {
     const course = await this.findById(courseId);
+    course.exams.forEach(async (exam) => {
+      await this.coursesExamService.delete(exam.id);
+    });
+    course.purchases.forEach(async (purchase) => {
+      await this.purchaseService.delete(purchase.id);
+    });
     return await this.coursesRepository.remove(course);
   }
 
