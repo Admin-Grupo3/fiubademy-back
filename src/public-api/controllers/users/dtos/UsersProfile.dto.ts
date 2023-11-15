@@ -1,5 +1,7 @@
 // import { ApiProperty } from '@nestjs/swagger';
 
+import { Categories } from "src/public-api/categories/categories.entity";
+
 export class UsersProfileResponse {
   // @ApiProperty()
   id: string;
@@ -9,4 +11,10 @@ export class UsersProfileResponse {
 
   // @ApiProperty()
   roles: string[];
+
+  // @ApiProperty()
+  birthDate: Date;
+
+  // @ApiProperty()
+  interests: Categories[];
 }
