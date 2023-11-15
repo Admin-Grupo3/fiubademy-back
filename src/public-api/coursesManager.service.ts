@@ -4,7 +4,7 @@ import { UsersService } from './users/users.service';
 import { LanguagesService } from './languages/languages.service';
 import { CategoriesService } from './categories/categories.service';
 import { CreateCourseExamDto } from './courses-exams/dtos/CreateCourseExam';
-import { PurchasesService } from './purchases/pruchases.service';
+import { PurchasesService } from './purchases/purchases.service';
 import ISO6391 from 'iso-639-1';
 import { answer } from './controllers/users/dtos/ExamTakeRequest.dto';
 

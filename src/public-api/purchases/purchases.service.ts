@@ -12,7 +12,8 @@ export class PurchasesService {
   ) {}
 
   async create(purchaseData: CreatePurchaseDto) {
-    const newPurchase: Purchases = this.purchasesRepository.create(purchaseData);
+    const newPurchase: Purchases =
+      this.purchasesRepository.create(purchaseData);
     return await this.purchasesRepository.save(newPurchase);
   }
 
@@ -21,5 +22,12 @@ export class PurchasesService {
       where: { user: { id: userId } },
       relations: ['course'],
     });
+  }
+
+  async delete(id: number) {
+    const purchase = await this.purchasesRepository.findOne({
+      where: { id },
+    });
+    return await this.purchasesRepository.remove(purchase);
   }
 }
