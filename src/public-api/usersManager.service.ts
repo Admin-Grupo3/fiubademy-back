@@ -136,6 +136,7 @@ export class UsersManagerService {
       birthDate: user.birthDate,
       interests: user.interests,
       roles: user.roles as unknown as string[],
+      exams_taken: user.examsTaken
     };
   }
 

@@ -21,7 +21,7 @@ export class CoursesService {
 
   async create(body: CreateCourseDto) {
     let company = undefined;
-    if (body.companyName !== '') {
+    if (body.companyName !== undefined) {
       const companyDb = await this.companyRepository.findOne({
         where: { title: body.companyName },
       });
@@ -92,9 +92,7 @@ export class CoursesService {
     const course = await this.findById(courseId);
     // for each property of data check if it exists and update it
     Object.keys(data).forEach((key) => {
-      if (course[key]) {
-        course[key] = data[key];
-      }
+      course[key] = data[key];
     });
     course.categories = [];
     await this.coursesRepository.save(course);
