@@ -60,7 +60,18 @@ export class Users extends BaseEntity {
     avgScore: number;
     createdAt: Date;
   }[];
-
+  @Column({
+    type: 'jsonb',
+    array: false,
+    default: () => "'[]'",
+    nullable: false,
+  })
+  coursesApproved: {
+    userId: string;
+    courseId: string;
+    title: string;
+    avgScore: number;
+  }[];
   @Column({ type: 'date', nullable: true })
   birthDate: Date;
 

@@ -219,7 +219,14 @@ export class CoursesManagerService {
       examId,
       answers,
     );
-
+    if (exam.avgScore >= 0.6) {
+      await this.usersService.addCourseCompleted(
+        userId,
+        courseId,
+        course.title,
+        exam.avgScore,
+      );
+    }
     // add exam to user
     await this.usersService.addExamTaken(
       userId,
