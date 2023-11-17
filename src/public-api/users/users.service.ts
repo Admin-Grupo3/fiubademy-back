@@ -64,7 +64,22 @@ export class UsersService {
       .where('id = :id', { id: userId })
       .execute();
   }
-
+  addCourseCompleted(
+    userId: string,
+    courseId: string,
+    title: string,
+    avgScore: number,
+  ) {
+    return this.usersRepository
+      .createQueryBuilder()
+      .update()
+      .set({
+        coursesApproved: () =>
+          `courses_approved || '{"userId": "${userId}", "courseId": "${courseId}", "avgScore": ${avgScore}, "title": "${title}}'`,
+      })
+      .where('id = :id', { id: userId })
+      .execute();
+  }
   async changePassword(
     userId: string,
     oldPassword: string,
