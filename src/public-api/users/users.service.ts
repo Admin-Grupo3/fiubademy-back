@@ -75,7 +75,7 @@ export class UsersService {
       .update()
       .set({
         coursesApproved: () =>
-          `courses_approved || '{"userId": "${userId}", "courseId": "${courseId}", "avgScore": ${avgScore}, "title": "${title}}'`,
+          `courses_approved || '{"userId": "${userId}", "courseId": "${courseId}", "title": "${title}" , "avgScore": ${avgScore}}'`,
       })
       .where('id = :id', { id: userId })
       .execute();
