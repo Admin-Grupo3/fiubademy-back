@@ -17,10 +17,16 @@ export class PurchasesService {
     return await this.purchasesRepository.save(newPurchase);
   }
 
+  async findAll() {
+    return this.purchasesRepository.find({
+      relations: ['course', 'course.exams', 'course.creator', 'course.company'],
+    });
+  }
+
   findByUserId(userId: string): Promise<Purchases[]> {
     return this.purchasesRepository.find({
       where: { user: { id: userId } },
-      relations: ['course'],
+      relations: ['course', 'course.exams'],
     });
   }
 

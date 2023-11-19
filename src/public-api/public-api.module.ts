@@ -29,6 +29,8 @@ import { LearningPathManagerService } from './learningPathManager.service';
 import { LearningPathPurchasesService } from './learning-paths-purchases/learningPathPurchases.service';
 import { LearningPathPurchases } from './learning-paths-purchases/learningPathPurchases.entity';
 import { Company } from './company/company.entity';
+import { PurchasesManagerService } from './purchasesManager.service';
+import { PurchasesController } from './controllers/purchases/purchases.controller';
 
 @Module({
   imports: [
@@ -57,6 +59,7 @@ import { Company } from './company/company.entity';
     TestsController,
     CategoriesController,
     LearningPathsController,
+    PurchasesController
   ],
   providers: [
     CategoriesService,
@@ -72,6 +75,7 @@ import { Company } from './company/company.entity';
     LearningPathManagerService,
     LearningPathPurchasesService,
     LearningPathManagerService,
+    PurchasesManagerService
   ],
   exports: [],
 })
