@@ -21,7 +21,7 @@ export class LearningPathPurchasesService {
   findByUserId(userId: string): Promise<LearningPathPurchases[]> {
     return this.learningPathPurchasesRepository.find({
       where: { user: { id: userId } },
-      relations: ['learningPath'],
+      relations: ['learningPath', 'learningPath.courses'],
     });
   }
 }

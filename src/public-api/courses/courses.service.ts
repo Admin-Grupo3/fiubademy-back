@@ -32,10 +32,10 @@ export class CoursesService {
         });
         await this.companyRepository.save(newCompany);
         company = newCompany;
-        console.log(company);
+      } else {
+        company = companyDb;
       }
-      company = companyDb;
-      console.log(company);
+
     }
     delete body.companyName;
     const newTask: Courses = this.coursesRepository.create({
