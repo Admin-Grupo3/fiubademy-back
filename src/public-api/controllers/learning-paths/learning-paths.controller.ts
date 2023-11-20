@@ -125,9 +125,8 @@ export class LearningPathsController {
       throw new HttpException(error.details, HttpStatus.BAD_REQUEST);
     }
   }
-  
+
   @UseGuards(LocalAuthGuard, RolesGuard)
-  @RolesAccess(ROLES.STANDARD_USER)
   @Get('learning-paths/purchases')
   async getPurchasedLearningPaths(
     @TokenData() tokenData: AuthTokenData,
