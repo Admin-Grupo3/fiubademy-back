@@ -126,6 +126,7 @@ export class LearningPathsController {
     }
   }
 
+  @UseGuards(LocalAuthGuard, RolesGuard)
   @Get('learning-paths/purchases')
   async getPurchasedLearningPaths(
     @TokenData() tokenData: AuthTokenData,
