@@ -29,6 +29,13 @@ import { LearningPathManagerService } from './learningPathManager.service';
 import { LearningPathPurchasesService } from './learning-paths-purchases/learningPathPurchases.service';
 import { LearningPathPurchases } from './learning-paths-purchases/learningPathPurchases.entity';
 import { Company } from './company/company.entity';
+import { CoursesRatingController } from './controllers/coursesRatings/coursesRatings.controller';
+import { CoursesRatingManagerService } from './coursesRatingManager.service';
+import { CoursesOpinionManagerService } from './coursesOpinionManager.service';
+import { CoursesRating } from './coursesRatings/coursesRating.entity';
+import { CoursesOpinions } from './courseOpinions/courseOpinions.entity';
+import { CoursesRatingService } from './coursesRatings/coursesRating.service';
+import { CoursesOpinionsService } from './courseOpinions/courseOpinions.service';
 import { PurchasesManagerService } from './purchasesManager.service';
 import { PurchasesController } from './controllers/purchases/purchases.controller';
 
@@ -46,6 +53,8 @@ import { PurchasesController } from './controllers/purchases/purchases.controlle
       LearningPaths,
       LearningPathPurchases,
       Company,
+      CoursesRating,
+      CoursesOpinions,
     ]),
     JwtModule.register({
       global: true,
@@ -59,7 +68,8 @@ import { PurchasesController } from './controllers/purchases/purchases.controlle
     TestsController,
     CategoriesController,
     LearningPathsController,
-    PurchasesController
+    CoursesRatingController,
+    PurchasesController,
   ],
   providers: [
     CategoriesService,
@@ -75,7 +85,11 @@ import { PurchasesController } from './controllers/purchases/purchases.controlle
     LearningPathManagerService,
     LearningPathPurchasesService,
     LearningPathManagerService,
-    PurchasesManagerService
+    CoursesRatingManagerService,
+    CoursesOpinionManagerService,
+    CoursesRatingService,
+    CoursesOpinionsService,
+    PurchasesManagerService,
   ],
   exports: [],
 })
