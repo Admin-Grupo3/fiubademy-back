@@ -36,6 +36,8 @@ import { CoursesRating } from './coursesRatings/coursesRating.entity';
 import { CoursesOpinions } from './courseOpinions/courseOpinions.entity';
 import { CoursesRatingService } from './coursesRatings/coursesRating.service';
 import { CoursesOpinionsService } from './courseOpinions/courseOpinions.service';
+import { PurchasesManagerService } from './purchasesManager.service';
+import { PurchasesController } from './controllers/purchases/purchases.controller';
 
 @Module({
   imports: [
@@ -67,6 +69,7 @@ import { CoursesOpinionsService } from './courseOpinions/courseOpinions.service'
     CategoriesController,
     LearningPathsController,
     CoursesRatingController,
+    PurchasesController,
   ],
   providers: [
     CategoriesService,
@@ -86,6 +89,7 @@ import { CoursesOpinionsService } from './courseOpinions/courseOpinions.service'
     CoursesOpinionManagerService,
     CoursesRatingService,
     CoursesOpinionsService,
+    PurchasesManagerService,
   ],
   exports: [],
 })
